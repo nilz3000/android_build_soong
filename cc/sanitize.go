@@ -279,6 +279,14 @@ func (sanitize *sanitize) begin(ctx BaseModuleContext) {
 		// TODO(ccross): error for compile_multilib = "32"?
 	}
 
+    // Dees_Troy / Ethan Yonker this will disable ubsan
+        s.Cfi = nil
+        s.Diag.Cfi = nil
+        s.Address = nil
+        s.Coverage = nil
+        s.Thread = nil
+	s.Undefined = nil
+
 	if ctx.Os() != android.Windows && (Bool(s.All_undefined) || Bool(s.Undefined) || Bool(s.Address) || Bool(s.Thread) ||
 		Bool(s.Coverage) || Bool(s.Safestack) || Bool(s.Cfi) || Bool(s.Integer_overflow) || len(s.Misc_undefined) > 0) {
 		sanitize.Properties.SanitizerEnabled = true
@@ -474,6 +482,7 @@ func (sanitize *sanitize) flags(ctx ModuleContext, flags Flags) Flags {
 
 	// Link a runtime library if needed.
 	runtimeLibrary := ""
+	/*
 	if Bool(sanitize.Properties.Sanitize.Address) {
 		runtimeLibrary = config.AddressSanitizerRuntimeLibrary(ctx.toolchain())
 	} else if Bool(sanitize.Properties.Sanitize.Thread) {
@@ -481,7 +490,7 @@ func (sanitize *sanitize) flags(ctx ModuleContext, flags Flags) Flags {
 	} else if len(diagSanitizers) > 0 {
 		runtimeLibrary = config.UndefinedBehaviorSanitizerRuntimeLibrary(ctx.toolchain())
 	}
-
+*/
 	if runtimeLibrary != "" {
 		// ASan runtime library must be the first in the link order.
 		flags.libFlags = append([]string{
